@@ -1,7 +1,6 @@
 package com.model;
 
-import java.util.List;
-
+import java.util.Arrays;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 @Document(indexName = "users" , type = "contacts")
@@ -10,13 +9,13 @@ public class Contact {
 	private String id;
 	private String name;
 	private String phone;
-	private List<Contact> friends;
+	private String[] friends;
 	
 	public Contact() {
 		super();
 	}
 
-	public Contact(String id, String name, String phone, List<Contact> friends) {
+	public Contact(String id, String name, String phone, String[] friends) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -48,24 +47,25 @@ public class Contact {
 		this.phone = phone;
 	}
 
-	public List<Contact> getFriends() {
+	public String[] getFriends() {
 		return friends;
 	}
 
-	public void setFriends(List<Contact> friends) {
+	public void setFriends(String[] friends) {
 		this.friends = friends;
 	}
 
 	@Override
 	public String toString() {
-		return "Contact [id=" + id + ", name=" + name + ", phone=" + phone + ", friends=" + friends + "]";
+		return "Contact [id=" + id + ", name=" + name + ", phone=" + phone + ", friends=" + Arrays.toString(friends) + "]";
 	}
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Contact) {
 			if(((Contact) obj).getId().equals(this.getId()) && 
 					((Contact) obj).getName().equals(this.getName()) && 
-						((Contact) obj).getPhone().equals(this.getPhone()))
+						((Contact) obj).getPhone().equals(this.getPhone()) &&
+							(Arrays.equals(((Contact) obj).getFriends(), this.getFriends())))
 				return true;
 			else
 				return false;

@@ -1,6 +1,8 @@
 package com.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
@@ -52,18 +54,13 @@ public class ContactServiceImp implements ContactService{
 	}
 
 	@Override
-	public List<Contact> getFriends(String id) {
-		return contactRepository.findOne(id).getFriends();
-	}
-
-	@Override
-	public void addFriend(String userId, String friendId) {
-		Contact user = contactRepository.findOne(userId);
-		Contact friend = contactRepository.findOne(friendId);
-		
-		user.getFriends().add(friend);
-		String json = new Gson().toJson(user);
-		update(user.getId(), json);
+	public List<Contact> getFriends(String userId) {
+		String[] friendIds = contactRepository.findOne(userId).getFriends();
+		List<Contact> friends = new ArrayList<>();
+		for(int i = 0;i<friendIds.length;i++) {
+			friends.add(contactRepository.findOne(friendIds[i]));
+		}
+		return friends;
 	}
 
 	@Override
@@ -119,15 +116,33 @@ public class ContactServiceImp implements ContactService{
 	public List<Contact> getAllContacts() {
 		return Lists.newArrayList(contactRepository.findAll());
 	}
+	@Override
+	public void addFriend(String userId, String friendId) {
+		Contact user = contactRepository.findOne(userId);
+		Contact friend = contactRepository.findOne(friendId);
+		List<String> temp = new ArrayList<>(Arrays.asList(user.getFriends()));
+		temp.add(friend.getId());
+		String[] array = new String[temp.size()];
+		array = temp.toArray(array);
 
+		user.setFriends(array);
+		String json = new Gson().toJson(user);
+		update(user.getId(), json);
+	}
 	@Override
 	public void removeFriend(String userId, String friendId) {
 		Contact user = contactRepository.findOne(userId);
 		Contact friend = contactRepository.findOne(friendId);
 		
-		user.getFriends().remove(friend);
-		String json = new Gson().toJson(user);
-		update(user.getId(), json);
+		List<String> temp = new ArrayList<>(Arrays.asList(user.getFriends()));
+		temp.remove(friend.getId());
 		
+		String[] array = new String[temp.size()];
+		array = temp.toArray(array);
+
+		user.setFriends(array);
+		
+		String json = new Gson().toJson(user);
+		update(user.getId(), json);	
 	}
 }

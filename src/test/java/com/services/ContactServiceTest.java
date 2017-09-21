@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ public class ContactServiceTest extends TestData{
         assertNotNull(testContact.getId());
         assertEquals(testContact.getName(), contact.getName());
         assertEquals(testContact.getPhone(), contact.getPhone());
-        assertEquals(testContact.getFriends(), contact.getFriends());
+        assertTrue(ArrayUtils.isEquals(testContact.getFriends(), contact.getFriends()));
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class ContactServiceTest extends TestData{
         assertNotNull(testContact.getId());
         assertEquals(testContact.getName(), contact.getName());
         assertEquals(testContact.getPhone(), contact.getPhone());
-        assertEquals(testContact.getFriends(), contact.getFriends());
+        assertTrue(ArrayUtils.isEquals(testContact.getFriends(), contact.getFriends()));
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class ContactServiceTest extends TestData{
         assertNotNull(testContact.getId());
         assertEquals(testContact.getName(), contact.getName());
         assertEquals(testContact.getPhone(), contact.getPhone());
-        assertEquals(testContact.getFriends(), contact.getFriends());
+        assertTrue(ArrayUtils.isEquals(testContact.getFriends(), contact.getFriends()));
 	}
 
 	@Test
@@ -72,28 +72,16 @@ public class ContactServiceTest extends TestData{
         assertNotNull(testContact.getId());
         assertEquals(testContact.getName(), contact.getName());
         assertEquals(testContact.getPhone(), contact.getPhone());
-        assertEquals(testContact.getFriends(), contact.getFriends());
+        assertTrue(ArrayUtils.isEquals(testContact.getFriends(), contact.getFriends()));
 	}
-
 	@Test
 	public void getFriends() {
 		contactService.save(contact);
-        List<Contact> testContact = contactService.getFriends(contact.getId());
-
-        for (int i = 0;i < testContact.size();i++) {
-        	assertEquals(testContact.get(i), contact.getFriends().get(i));
-		}
-	}
-
-	@Test
-	public void addFriend() {
-		contactService.save(contact);
 		contactService.save(contactTwo);
-		
-		contactService.addFriend(contact.getId(), contactTwo.getId());
-		
-		assertTrue(contact.getFriends().size() < contactService.findById(contact.getId()).getFriends().size());
-		assertTrue(contactService.findById(contact.getId()).getFriends().contains(contactTwo));
+        List<Contact> testContact = contactService.getFriends(contact.getId());
+        for (int i = 0;i < testContact.size();i++) {
+        	assertEquals(testContact.get(i).getId(), contact.getFriends()[i]);
+		}
 	}
 
 	@Test
@@ -132,6 +120,15 @@ public class ContactServiceTest extends TestData{
 		contactService.addFriend(contact.getId(), contactTwo.getId());
 		contactService.removeFriend(contact.getId(), contactTwo.getId());
 		
-		assertTrue(!contactService.findById(contact.getId()).getFriends().contains(contactTwo));
+		assertTrue(contact.getFriends().length == contactService.findById(contact.getId()).getFriends().length);
+	}
+
+	@Test
+	public void addFriend() {
+		contactService.save(contact);
+		contactService.save(contactTwo);
+		contactService.addFriend(contact.getId(), contactTwo.getId());
+		
+		assertTrue(contact.getFriends().length < contactService.findById(contact.getId()).getFriends().length);
 	}
 }

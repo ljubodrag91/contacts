@@ -7,7 +7,6 @@ import com.config.ElasticsearchConfig;
 import com.controller.ContactController;
 import com.services.ContactService;
 
-
 @SpringBootApplication
 @ComponentScan(basePackageClasses = {ContactService.class,ElasticsearchConfig.class,ContactController.class})
 public class SpringBootFrameworkApplication {

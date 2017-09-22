@@ -22,7 +22,5 @@ public abstract class TestData {
 		friendsTwo = new String[]{"1"};
 		contact = new Contact("1", "Bob", "12345678", friends);
 		contactTwo = new Contact("4", "Billy", "55555555", friends);
-	}
-	
-	
+	}	
 }

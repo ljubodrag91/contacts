@@ -21,8 +21,12 @@ import com.services.ContactService;
 @RequestMapping(value = "/contact")
 public class ContactController {
 	
-    @Autowired
     private ContactService contactService;
+    
+    @Autowired
+    public ContactController(ContactService contactService) {
+    	this.contactService = contactService;
+    }
     
     @GetMapping(value = "/search",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Contact> getAllContacts(){

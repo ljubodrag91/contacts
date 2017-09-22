@@ -1,8 +1,9 @@
 package com.controller;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,11 +16,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 import com.google.gson.Gson;
 import com.main.SpringBootFrameworkApplication;
 import com.model.Contact;
-
 import _test.data.TestData;
 
 @RunWith(SpringRunner.class)
@@ -44,7 +43,7 @@ public class ContactControllerTest extends TestData{
         setUp();
         super.initTestData();
     }
-	
+
 	@Test
 	public void testGetAllContacts() throws Exception {
 		contactService.save(contact);
@@ -54,11 +53,12 @@ public class ContactControllerTest extends TestData{
 				.get(uri)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
 				.andReturn();
-		String content = result.getResponse().getContentAsString();
+		String content = result.getResponse().getContentAsString().trim();
 		int status = result.getResponse().getStatus();
 		
-		assertEquals(200, status);
-		assertTrue(content.trim().length() > 0);
+		assertThat(status, equalTo(200));
+		assertThat(content.length(), greaterThan(0));
+		
 	}
 	@Test
 	public void testGetContact() throws Exception {
@@ -72,8 +72,8 @@ public class ContactControllerTest extends TestData{
 		String content = result.getResponse().getContentAsString();
 		int status = result.getResponse().getStatus();
 		
-		assertEquals(200, status);
-		assertTrue(content.trim().length() > 0);
+		assertThat(status, equalTo(200));
+		assertThat(content.length(), greaterThan(0));
 	}
 	@Test
 	public void testGetFriends() throws Exception {
@@ -87,8 +87,8 @@ public class ContactControllerTest extends TestData{
 		String content = result.getResponse().getContentAsString();
 		int status = result.getResponse().getStatus();
 		
-		assertEquals(200, status);
-		assertTrue(content.trim().length() > 0);
+		assertThat(status, equalTo(200));
+		assertThat(content.length(), greaterThan(0));
 	}
 	@Test
 	public void testRegister() throws Exception {
@@ -102,7 +102,7 @@ public class ContactControllerTest extends TestData{
 				.andReturn();
 		int status = result.getResponse().getStatus();
 		
-		assertEquals(201, status);
+		assertThat(status, equalTo(201));
 	}
 	@Test
 	public void testAddFriend() throws Exception {
@@ -118,7 +118,7 @@ public class ContactControllerTest extends TestData{
 				.andReturn();
 		int status = result.getResponse().getStatus();
 		
-		assertEquals(200, status);
+		assertThat(status, equalTo(200));
 	}
 	@Test
 	public void testRemoveFriend() throws Exception {
@@ -134,7 +134,7 @@ public class ContactControllerTest extends TestData{
 				.andReturn();
 		int status = result.getResponse().getStatus();
 		
-		assertEquals(200, status);
+		assertThat(status, equalTo(200));
 	}
 	@Test
 	public void testUpdate_OK() throws Exception {
@@ -150,7 +150,7 @@ public class ContactControllerTest extends TestData{
 				.andReturn();
 		int status = result.getResponse().getStatus();
 		
-		assertEquals(200, status);
+		assertThat(status, equalTo(200));
 	}
 	@Test
 	public void testDelete_OK() throws Exception {
@@ -164,5 +164,4 @@ public class ContactControllerTest extends TestData{
 		
 		assertEquals(200, status);
 	}
-	
 }

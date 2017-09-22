@@ -22,16 +22,15 @@ import com.repositories.ContactRepository;
 @Service
 public class ContactServiceImp implements ContactService{
 
-	
+    private ElasticsearchOperations es;
 	private ContactRepository contactRepository;
 	
 	@Autowired
-	public void setContactRepository(ContactRepository contactRepository) {
+	public ContactServiceImp(ContactRepository contactRepository,ElasticsearchOperations elastic) {
 		this.contactRepository = contactRepository;
+		this.es = elastic;
 	}
 	
-    @Autowired
-    private ElasticsearchOperations es;
     
 	@Override
 	public Contact save(Contact contact) {
